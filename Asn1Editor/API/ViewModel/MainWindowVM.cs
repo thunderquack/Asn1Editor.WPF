@@ -68,7 +68,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public ObservableCollection<Asn1DocumentVM> LeftTabs { get; } = [];
     public ObservableCollection<Asn1DocumentVM> RightTabs { get; } = [];
 
-    public bool RightPanelIsVisible
+    public bool IsSplitView
     {
         get => rightPanelIsVisible && RightTabs.Any();
         set
@@ -159,7 +159,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
         if (!RightTabs.Any())
         {
-            RightPanelIsVisible = false;
+            IsSplitView = false;
         }
     }
 
@@ -340,7 +340,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     }
     Boolean closeTabsWithPreservation(Asn1DocumentVM preservedTab = null) {
         // loop over a copy of tabs since we are going to update source collection in a loop
-        var tabs = Enumerable.Union(LeftTabs, RightTabs);
+        var tabs = Enumerable.Union(LeftTabs, RightTabs).ToList();
         foreach (Asn1DocumentVM tab in tabs)
         {
             if (preservedTab != null && Equals(tab, preservedTab))

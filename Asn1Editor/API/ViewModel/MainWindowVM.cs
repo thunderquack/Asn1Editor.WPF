@@ -42,7 +42,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         OpenCommand = new AsyncCommand(openFileAsync);
         SaveCommand = new RelayCommand(saveFile, canPrintSave);
         DropFileCommand = new AsyncCommand(dropFileAsync);
-        MoveTabToRightCommand = new RelayCommand<Asn1DocumentVM>(moveTabToRight);
+        MoveTabToRightCommand = new RelayCommand(moveTabToRight);
         appCommands.ShowConverterWindow = new RelayCommand(showConverter);
         addTabToList(new Asn1DocumentVM(NodeViewOptions, TreeCommands));
     }
@@ -229,13 +229,17 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// Moves tab document from <see cref="LeftTabs"/> to <see cref="RightTabs"/> list.
     /// </summary>
     /// <param name="tab"></param>
-    private void moveTabToRight(Asn1DocumentVM tab)
+    private void moveTabToRight(Object o)
     {
-        if (LeftTabs.Count > 1 && LeftTabs.Remove(tab))
+        var tab = SelectedTab;
+        if (LeftTabs.Count > 1)
         {
-            RightTabs.Add(tab);
-            IsSplitView = true;
-            SelectedRightTab = tab;
+            if (LeftTabs.Remove(tab))
+            {
+                RightTabs.Add(tab);
+                IsSplitView = true;
+                SelectedRightTab = tab;
+            }
         }
     }
 

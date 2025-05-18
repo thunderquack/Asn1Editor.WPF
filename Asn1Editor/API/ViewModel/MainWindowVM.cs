@@ -19,7 +19,10 @@ namespace SysadminsLV.Asn1Editor.API.ViewModel;
 class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     readonly IWindowFactory _windowFactory;
     readonly IUIMessenger _uiMessenger;
-    Asn1DocumentVM selectedTab;
+    Asn1DocumentVM selectedLeftTab;
+    Asn1DocumentVM selectedRightTab;
+    private bool rightPanelIsActive = false;
+    private ActivePanel activePanel = ActivePanel.Left;
 
     public MainWindowVM(
         IWindowFactory windowFactory,
@@ -63,10 +66,56 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public GlobalData GlobalData { get; }
     public NodeViewOptions NodeViewOptions { get; }
     public ObservableCollection<Asn1DocumentVM> LeftTabs { get; } = [];
+    public ObservableCollection<Asn1DocumentVM> RightTabs { get; } = [];
+    
+    /// <summary>
+    /// Selected tab of both panels
+    /// </summary>
     public Asn1DocumentVM SelectedTab {
-        get => selectedTab;
-        set {
-            selectedTab = value;
+        get
+        {
+            if (!rightPanelIsActive)
+            {
+                return selectedLeftTab;
+            }
+            if (activePanel == ActivePanel.Left)
+            {
+                return selectedLeftTab;
+            } 
+            else
+            {
+                return selectedRightTab;
+            }
+        }
+        set
+        {
+            if (activePanel == ActivePanel.Left)
+            {
+                SelectedLeftTab = value;
+            }
+            else
+            {
+                SelectedRightTab = value;
+            }
+        }
+    }
+
+    public Asn1DocumentVM SelectedLeftTab
+    {
+        get => selectedLeftTab;
+        set
+        {
+            selectedLeftTab = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public Asn1DocumentVM SelectedRightTab
+    {
+        get => selectedRightTab;
+        set
+        {
+            selectedRightTab = value;
             OnPropertyChanged();
         }
     }

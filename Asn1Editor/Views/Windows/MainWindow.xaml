@@ -315,7 +315,8 @@
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
             </Grid.Resources>
-            <wpfControls:ClosableTabControl ItemsSource="{Binding LeftTabs}"
+            <wpfControls:ClosableTabControl Grid.Column="0"
+                                        ItemsSource="{Binding LeftTabs}"
                                         SelectedItem="{Binding SelectedTab}"
                                         AddTabCommand="{Binding NewCommand}"
                                         CloseTabCommand="{Binding CloseTabCommand}"

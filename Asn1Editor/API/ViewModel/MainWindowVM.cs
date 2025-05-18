@@ -21,7 +21,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     readonly IUIMessenger _uiMessenger;
     Asn1DocumentVM selectedLeftTab;
     Asn1DocumentVM selectedRightTab;
-    private bool rightPanelIsActive = false;
+    private bool rightPanelIsVisible = false;
     private ActivePanel activePanel = ActivePanel.Left;
 
     public MainWindowVM(
@@ -67,14 +67,24 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public NodeViewOptions NodeViewOptions { get; }
     public ObservableCollection<Asn1DocumentVM> LeftTabs { get; } = [];
     public ObservableCollection<Asn1DocumentVM> RightTabs { get; } = [];
-    
+
+    public bool RightPanelIsVisible
+    {
+        get => rightPanelIsVisible && RightTabs.Any();
+        set
+        {
+            rightPanelIsVisible = value;
+            OnPropertyChanged();
+        }
+    }
+
     /// <summary>
     /// Selected tab of both panels
     /// </summary>
     public Asn1DocumentVM SelectedTab {
         get
         {
-            if (!rightPanelIsActive)
+            if (!rightPanelIsVisible)
             {
                 return selectedLeftTab;
             }
@@ -145,6 +155,11 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         else
         {
             RightTabs.Remove(tab);
+        }
+
+        if (!RightTabs.Any())
+        {
+            RightPanelIsVisible = false;
         }
     }
 

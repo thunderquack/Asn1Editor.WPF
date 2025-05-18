@@ -364,7 +364,11 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         }
     }
 
-    public Task RefreshTabs(Func<Asn1TreeNode, Boolean>? filter = null) {
-        return Task.WhenAll(LeftTabs.Select(x => x.RefreshTreeView(filter)));
+    public Task RefreshTabs(Func<Asn1TreeNode, Boolean>? filter = null)
+    {
+        return Task.WhenAll(
+            Enumerable.Union(
+                LeftTabs.Select(x => x.RefreshTreeView(filter)),
+                RightTabs.Select(x => x.RefreshTreeView(filter))));
     }
 }

@@ -25,6 +25,28 @@
         <KeyBinding Modifiers="Control+Shift" Key="S" Command="{Binding SaveCommand}" CommandParameter="2"/>
     </Window.InputBindings>
     <Window.Resources>
+        <Style x:Key="ScrollableTabControlLeft" TargetType="{x:Type wpfControls:ClosableTabControl}">
+            <Setter Property="UIElement.SnapsToDevicePixels" Value="true" />
+            <Setter Property="BorderThickness" Value="1,0,1,1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type wpfControls:ClosableTabControl}">
+                        <ContentPresenter Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollableTabControlRight" TargetType="{x:Type wpfControls:ClosableTabControl}">
+            <Setter Property="UIElement.SnapsToDevicePixels" Value="true" />
+            <Setter Property="BorderThickness" Value="1,0,1,1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type wpfControls:ClosableTabControl}">
+                        <ContentPresenter Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <DataTemplate x:Key="AsnTabHeaderTemplate">
             <TextBlock Text="{Binding Header}"
            ToolTip="{Binding Path=ToolTipText}"
@@ -524,7 +546,8 @@
                                             CloseTabCommand="{Binding CloseTabCommand}"
                                             ShowNewTabButton="False"
                                             BorderThickness="0"
-                                            Style="{StaticResource ScrollableTabControl}">
+                                       >
+                
                 <wpfControls:ClosableTabControl.ItemTemplate>
                     <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
                 </wpfControls:ClosableTabControl.ItemTemplate>
@@ -546,8 +569,7 @@
                                             AddTabCommand="{Binding NewCommand}"
                                             CloseTabCommand="{Binding CloseTabCommand}"
                                             ShowNewTabButton="False"
-                                            BorderThickness="0"
-                                            Style="{StaticResource ScrollableTabControl}"
+                                            BorderThickness="0"                                            
                                             Visibility="{Binding IsSplitView, Converter={StaticResource BooleanToVisibility}}">
                 <wpfControls:ClosableTabControl.ItemTemplate>
                     <StaticResource ResourceKey="AsnTabHeaderTemplate"/>

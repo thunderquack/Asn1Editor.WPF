@@ -546,8 +546,7 @@
                                             CloseTabCommand="{Binding CloseTabCommand}"
                                             ShowNewTabButton="False"
                                             BorderThickness="0"
-                                       >
-                
+                                            >
                 <wpfControls:ClosableTabControl.ItemTemplate>
                     <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
                 </wpfControls:ClosableTabControl.ItemTemplate>

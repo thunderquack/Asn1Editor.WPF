@@ -25,32 +25,10 @@
         <KeyBinding Modifiers="Control+Shift" Key="S" Command="{Binding SaveCommand}" CommandParameter="2"/>
     </Window.InputBindings>
     <Window.Resources>
-        <Style x:Key="ScrollableTabControlLeft" TargetType="{x:Type wpfControls:ClosableTabControl}">
-            <Setter Property="UIElement.SnapsToDevicePixels" Value="true" />
-            <Setter Property="BorderThickness" Value="1,0,1,1" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type wpfControls:ClosableTabControl}">
-                        <ContentPresenter Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ScrollableTabControlRight" TargetType="{x:Type wpfControls:ClosableTabControl}">
-            <Setter Property="UIElement.SnapsToDevicePixels" Value="true" />
-            <Setter Property="BorderThickness" Value="1,0,1,1" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type wpfControls:ClosableTabControl}">
-                        <ContentPresenter Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
         <DataTemplate x:Key="AsnTabHeaderTemplate">
             <TextBlock Text="{Binding Header}"
            ToolTip="{Binding Path=ToolTipText}"
-           Tag="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=wpfControls:ClosableTabControl}}"
+           Tag="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=TabControl}}"
            ContextMenuOpening="onTabHeaderContextMenuOpening">
                 <TextBlock.ContextMenu>
                     <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
@@ -247,7 +225,7 @@
             </DockPanel>
         </DataTemplate>
     </Window.Resources>
-    
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
@@ -532,51 +510,48 @@
             </StatusBarItem>
         </StatusBar>
         <Grid>
-            <Grid.Resources>
-                <ResourceDictionary>
-                    <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="/Views/TreeViewResources.xaml"/>
-                    </ResourceDictionary.MergedDictionaries>
-                </ResourceDictionary>
-            </Grid.Resources>
-            <wpfControls:ClosableTabControl Grid.Column="0"
-                                            ItemsSource="{Binding LeftTabs}"
-                                            SelectedItem="{Binding SelectedLeftTab}"
-                                            AddTabCommand="{Binding NewCommand}"
-                                            CloseTabCommand="{Binding CloseTabCommand}"
-                                            ShowNewTabButton="False"
-                                            BorderThickness="0"
-                                            >
-                <wpfControls:ClosableTabControl.ItemTemplate>
-                    <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
-                </wpfControls:ClosableTabControl.ItemTemplate>
-                <wpfControls:ClosableTabControl.ContentTemplate>
-                    <StaticResource ResourceKey="AsnTabContentTemplate"/>
-                </wpfControls:ClosableTabControl.ContentTemplate>
-            </wpfControls:ClosableTabControl>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="LightBlue">
+                <TabControl ItemsSource="{Binding LeftTabs}"
+                    SelectedItem="{Binding SelectedLeftTab}"
+                    BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                    <TabControl.ItemTemplate>
+                        <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <StaticResource ResourceKey="AsnTabContentTemplate"/>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+            </Border>
             <GridSplitter Grid.Column="1"
-                  Visibility="{Binding IsSplitView, Converter={StaticResource BooleanToVisibility}}"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
                   Width="5"
                   Background="DarkGray"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
                   ShowsPreview="True"
                   ResizeBehavior="PreviousAndNext" />
-            <wpfControls:ClosableTabControl Grid.Column="2"
-                                            ItemsSource="{Binding RightTabs}"
-                                            SelectedItem="{Binding SelectedRightTab}"
-                                            AddTabCommand="{Binding NewCommand}"
-                                            CloseTabCommand="{Binding CloseTabCommand}"
-                                            ShowNewTabButton="False"
-                                            BorderThickness="0"                                            
-                                            Visibility="{Binding IsSplitView, Converter={StaticResource BooleanToVisibility}}">
-                <wpfControls:ClosableTabControl.ItemTemplate>
-                    <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
-                </wpfControls:ClosableTabControl.ItemTemplate>
-                <wpfControls:ClosableTabControl.ContentTemplate>
-                    <StaticResource ResourceKey="AsnTabContentTemplate"/>
-                </wpfControls:ClosableTabControl.ContentTemplate>
-            </wpfControls:ClosableTabControl>
+            <Border Grid.Column="2" Background="LightGreen">
+                <TabControl ItemsSource="{Binding RightTabs}"
+                    SelectedItem="{Binding SelectedRightTab}"
+                    BorderThickness="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Visibility="{Binding IsSplitView, Converter={StaticResource BooleanToVisibility}}">
+                    <TabControl.ItemTemplate>
+                        <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <StaticResource ResourceKey="AsnTabContentTemplate"/>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+            </Border>
         </Grid>
     </DockPanel>
 </Window>

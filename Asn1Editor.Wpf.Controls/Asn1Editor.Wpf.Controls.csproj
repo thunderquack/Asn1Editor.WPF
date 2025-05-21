@@ -61,6 +61,7 @@
     <Compile Include="AutoSizeTextBox.cs" />
     <Compile Include="Behaviors\TextBlockBehavior.cs" />
     <Compile Include="BusyIndicator.cs" />
+    <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\IntegerToEnumConverter.cs" />
     <Compile Include="Extensions\TextBoxBaseExtensions.cs" />
     <Compile Include="IHexAsnNode.cs" />

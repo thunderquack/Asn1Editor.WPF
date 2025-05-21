@@ -520,8 +520,8 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="{Binding SeparatorWidth}" />
+                <ColumnDefinition Width="{Binding RightColumnWidth}" />
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Background="LightBlue">
                 <TabControl ItemsSource="{Binding LeftTabs}"

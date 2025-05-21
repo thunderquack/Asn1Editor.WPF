@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using SysadminsLV.Asn1Editor.API.Abstractions;
+﻿using SysadminsLV.Asn1Editor.API.Abstractions;
 using SysadminsLV.Asn1Editor.API.Interfaces;
 using SysadminsLV.Asn1Editor.API.ModelObjects;
 using SysadminsLV.Asn1Editor.API.Utils;
 using SysadminsLV.Asn1Parser;
 using SysadminsLV.WPF.OfficeTheme.Controls;
 using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace SysadminsLV.Asn1Editor.API.ViewModel;
 
@@ -90,6 +91,9 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// Gets a value indicating whether the current view is not a split view
     /// </summary>
     public bool IsNotSplitView => !IsSplitView;
+
+    public GridLength SeparatorWidth => IsSplitView ? new GridLength(5) : new GridLength(0);
+    public GridLength RightColumnWidth => IsSplitView ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
 
     /// <summary>
     /// Selected tab of both panels

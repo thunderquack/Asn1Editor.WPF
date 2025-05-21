@@ -71,6 +71,11 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public ObservableCollection<Asn1DocumentVM> LeftTabs { get; } = [];
     public ObservableCollection<Asn1DocumentVM> RightTabs { get; } = [];
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the view is split into multiple panels.
+    /// </summary>
+    /// <remarks>Setting this property to <see langword="true"/> makes the right panel visible, provided it
+    /// contains tabs.  Setting it to <see langword="false"/> hides the right panel.</remarks>
     public bool IsSplitView
     {
         get => rightPanelIsVisible && RightTabs.Any();
@@ -80,6 +85,11 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
             OnPropertyChanged();
         }
     }
+
+    /// <summary>
+    /// Gets a value indicating whether the current view is not a split view
+    /// </summary>
+    public bool IsNotSplitView => !IsSplitView;
 
     /// <summary>
     /// Selected tab of both panels

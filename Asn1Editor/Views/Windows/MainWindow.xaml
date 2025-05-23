@@ -524,7 +524,7 @@
                 <ColumnDefinition Width="{Binding RightColumnWidth}" />
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Background="LightBlue">
-                <TabControl ItemsSource="{Binding LeftTabs}"
+                <TabControl ItemsSource="{Binding LeftTabsView}"
                     SelectedItem="{Binding SelectedLeftTab}"
                     BorderThickness="0"
                     Style="{StaticResource LeftTabControlStyle}"
@@ -550,7 +550,7 @@
                 Grid.Column="2" 
                 Background="LightGreen" 
                 Visibility="{Binding IsSplitView, Converter={StaticResource BooleanToVisibility}}">
-                <TabControl ItemsSource="{Binding RightTabs}"
+                <TabControl ItemsSource="{Binding RightTabsView}"
                 SelectedItem="{Binding SelectedRightTab}"
                 BorderThickness="0"
                     HorizontalAlignment="Stretch"

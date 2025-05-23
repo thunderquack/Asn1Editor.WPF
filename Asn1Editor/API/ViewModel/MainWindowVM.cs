@@ -8,11 +8,13 @@ using SysadminsLV.WPF.OfficeTheme.Toolkit.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace SysadminsLV.Asn1Editor.API.ViewModel;
@@ -30,7 +32,8 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public MainWindowVM(
         IWindowFactory windowFactory,
         IAppCommands appCommands,
-        NodeViewOptions nodeViewOptions) {
+        NodeViewOptions nodeViewOptions)
+    {
         _windowFactory = windowFactory;
         _uiMessenger = windowFactory.GetUIMessenger();
         GlobalData = new GlobalData();
@@ -38,21 +41,50 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         TreeCommands = new TreeViewCommands(windowFactory, this);
         NodeViewOptions = nodeViewOptions;
         NodeViewOptions.RequireTreeRefresh += onNodeViewOptionsChanged;
+
         NewCommand = new RelayCommand(newTab);
-        CloseTabCommand = new RelayCommand(closeTab, canCloseTab);
-        CloseAllTabsCommand = new RelayCommand(closeAllTabs);
-        CloseAllButThisTabCommand = new RelayCommand(closeAllButThisTab, canCloseAllButThisTab);
+        CloseTabCommand = new RelayCommand(closeTab);
+        CloseAllTabsCommand = new RelayCommand(_ => CloseAllTabs());
+        CloseAllButThisTabCommand = new RelayCommand(closeAllButThisTab);
         OpenCommand = new AsyncCommand(openFileAsync);
         SaveCommand = new RelayCommand(saveFile, canPrintSave);
         DropFileCommand = new AsyncCommand(dropFileAsync);
         MoveTabToLeftCommand = new RelayCommand(moveTabToLeft);
         MoveTabToRightCommand = new RelayCommand(moveTabToRight);
         appCommands.ShowConverterWindow = new RelayCommand(showConverter);
+
+        // Initialize views
+        LeftTabsView = new ListCollectionView(Tabs);
+        LeftTabsView.Filter = o => (o as Asn1DocumentVM)?.ActivePanel == ActivePanel.Left;
+
+        RightTabsView = new ListCollectionView(Tabs);
+        RightTabsView.Filter = o => (o as Asn1DocumentVM)?.ActivePanel == ActivePanel.Right;
+
+        // Handle dynamic updates
+        Tabs.CollectionChanged += (_, _) => attachPropertyChangedHandlers();
+
+        // Start with one tab
         addTabToList(new Asn1DocumentVM(NodeViewOptions, TreeCommands));
     }
 
     async void onNodeViewOptionsChanged(Object sender, RequireTreeRefreshEventArgs args) {
         await RefreshTabs(args.Filter);
+    }
+    void attachPropertyChangedHandlers()
+    {
+        foreach (var tab in Tabs)
+        {
+            tab.PropertyChanged -= onTabPropertyChanged;
+            tab.PropertyChanged += onTabPropertyChanged;
+        }
+    }
+    void onTabPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Asn1DocumentVM.ActivePanel))
+        {
+            LeftTabsView.Refresh();
+            RightTabsView.Refresh();
+        }
     }
 
     public ICommand NewCommand { get; }
@@ -82,6 +114,9 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public NodeViewOptions NodeViewOptions { get; }
 
     public ObservableCollection<Asn1DocumentVM> Tabs { get; } = [];
+
+    public ICollectionView LeftTabsView { get; }
+    public ICollectionView RightTabsView { get; }
 
     public ObservableCollection<Asn1DocumentVM> LeftTabs
     {

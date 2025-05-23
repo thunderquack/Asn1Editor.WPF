@@ -80,8 +80,24 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     public GlobalData GlobalData { get; }
     public NodeViewOptions NodeViewOptions { get; }
-    public ObservableCollection<Asn1DocumentVM> LeftTabs { get; } = [];
-    public ObservableCollection<Asn1DocumentVM> RightTabs { get; } = [];
+
+    public ObservableCollection<Asn1DocumentVM> Tabs { get; } = [];
+
+    public ObservableCollection<Asn1DocumentVM> LeftTabs
+    {
+        get
+        {
+            return new ObservableCollection<Asn1DocumentVM>(Tabs.Where(x => x.ActivePanel == ActivePanel.Left));
+        }
+    }
+
+    public ObservableCollection<Asn1DocumentVM> RightTabs
+    {
+        get
+        {
+            return new ObservableCollection<Asn1DocumentVM>(Tabs.Where(x => x.ActivePanel == ActivePanel.Right));
+        }
+    }
 
     /// <summary>
     /// Gets or sets a value indicating whether the view is split into multiple panels.
@@ -199,14 +215,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     void removeTab(Asn1DocumentVM tab) 
     {
-        if (activePanel == ActivePanel.Left)
-        {
-            LeftTabs.Remove(tab);
-        }
-        else
-        {
-            RightTabs.Remove(tab);
-        }
+        Tabs.Remove(tab);
 
         if (!RightTabs.Any())
         {
@@ -221,14 +230,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// <param name="tab">Tab document to add.</param>
     void addTabToList(Asn1DocumentVM tab)
     {
-        if (activePanel == ActivePanel.Left)
-        {
-            LeftTabs.Add(tab);
-        }
-        else
-        {
-            RightTabs.Add(tab);
-        }
+        Tabs.Add(tab);
         SelectedTab = tab;
     }
     /// <summary>
@@ -243,7 +245,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     Asn1DocumentVM getAvailableTab(out Boolean isNew) {
         isNew = false;
         Boolean useExistingTab = SelectedTab is not null && SelectedTab.CanReuse;
-        if (useExistingTab && (LeftTabs.Any() || RightTabs.Any())) {
+        if (useExistingTab && Tabs.Any()) {
             return SelectedTab;
         }
 
@@ -279,10 +281,10 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// <param name="tab"></param>
     private void moveTabToRight(Object o)
     {
-        var tab = SelectedTab;
-        if (LeftTabs.Count > 1 && LeftTabs.Remove(tab))
+        var tab = SelectedTab;        
+        if (LeftTabs.Count > 1)
         {
-            RightTabs.Add(tab);
+            tab.ActivePanel = ActivePanel.Right;
             IsSplitView = true;
             SelectedRightTab = tab;
             if (RightTabs.Count == 1)
@@ -297,21 +299,15 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     private void moveTabToLeft(Object o)
     {
         var tab = SelectedTab;
-        if (RightTabs.Count > 1)
+        tab.ActivePanel = ActivePanel.Left;
+        SelectedLeftTab = tab;
+        if (RightTabs.Count == 0)
         {
-            if (RightTabs.Remove(tab))
-            {
-                LeftTabs.Add(tab);                
-                SelectedLeftTab = tab;
-                if (LeftTabs.Count == 0)
-                {
-                    IsSplitView = false;
-                    RightColumnWidth = new GridLength(0, GridUnitType.Pixel);
-                    SeparatorWidth = new GridLength(0, GridUnitType.Pixel);
-                    SelectedRightTab = null;
-                }
-                OnPropertyChanged();
-            }
+            IsSplitView = false;
+            RightColumnWidth = new GridLength(0, GridUnitType.Pixel);
+            SeparatorWidth = new GridLength(0, GridUnitType.Pixel);
+            SelectedRightTab = null;
+            OnPropertyChanged();
         }
     }
 
@@ -413,7 +409,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         }
     }
     Boolean canCloseAllButThisTab(Object o) {
-        if (Enumerable.Union(LeftTabs, RightTabs).Count() == 0) {
+        if (Tabs.Count == 0) {
             return false;
         }
         if (o == null) {
@@ -433,7 +429,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     }
     Boolean closeTabsWithPreservation(Asn1DocumentVM preservedTab = null) {
         // loop over a copy of tabs since we are going to update source collection in a loop
-        var tabs = Enumerable.Union(LeftTabs, RightTabs).ToList();
+        var tabs = Tabs.ToList();
         foreach (Asn1DocumentVM tab in tabs)
         {
             if (preservedTab != null && Equals(tab, preservedTab))
@@ -499,9 +495,6 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     public Task RefreshTabs(Func<Asn1TreeNode, Boolean>? filter = null)
     {
-        return Task.WhenAll(
-            Enumerable.Union(
-                LeftTabs.Select(x => x.RefreshTreeView(filter)),
-                RightTabs.Select(x => x.RefreshTreeView(filter))));
+        return Task.WhenAll(Tabs.Select(x => x.RefreshTreeView(filter)));
     }
 }

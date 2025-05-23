@@ -103,10 +103,9 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         set
         {
             separatorWidth = value;
+            OnPropertyChanged();
         }
     } 
-
-    //public GridLength RightColumnWidth => IsSplitView ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
 
     public GridLength RightColumnWidth
     {
@@ -117,9 +116,9 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         set
         {
             rightColumnWidth = value;
+            OnPropertyChanged();
         }
     }
-
 
     /// <summary>
     /// Selected tab of both panels

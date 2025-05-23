@@ -45,6 +45,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         OpenCommand = new AsyncCommand(openFileAsync);
         SaveCommand = new RelayCommand(saveFile, canPrintSave);
         DropFileCommand = new AsyncCommand(dropFileAsync);
+        MoveTabToLeftCommand = new RelayCommand(moveTabToLeft);
         MoveTabToRightCommand = new RelayCommand(moveTabToRight);
         appCommands.ShowConverterWindow = new RelayCommand(showConverter);
         addTabToList(new Asn1DocumentVM(NodeViewOptions, TreeCommands));
@@ -67,6 +68,14 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public IAppCommands AppCommands { get; }
     public ITreeCommands TreeCommands { get; }
 
+    /// <summary>
+    /// Gets the command that moves the currently selected tab to the left.
+    /// </summary>
+    public ICommand MoveTabToLeftCommand { get; }
+
+    /// <summary>
+    /// Gets the command that moves the currently selected tab to the right.
+    /// </summary>
     public ICommand MoveTabToRightCommand { get; }
 
     public GlobalData GlobalData { get; }
@@ -271,17 +280,35 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     private void moveTabToRight(Object o)
     {
         var tab = SelectedTab;
-        if (LeftTabs.Count > 1)
+        if (LeftTabs.Count > 1 && LeftTabs.Remove(tab))
         {
-            if (LeftTabs.Remove(tab))
+            RightTabs.Add(tab);
+            IsSplitView = true;
+            SelectedRightTab = tab;
+            if (RightTabs.Count == 1)
             {
-                RightTabs.Add(tab);
-                IsSplitView = true;
-                SelectedRightTab = tab;
-                if (RightTabs.Count == 1)
+                RightColumnWidth = new GridLength(1, GridUnitType.Star);
+                SeparatorWidth = new GridLength(5, GridUnitType.Pixel);
+            }
+            OnPropertyChanged();
+        }
+    }
+
+    private void moveTabToLeft(Object o)
+    {
+        var tab = SelectedTab;
+        if (RightTabs.Count > 1)
+        {
+            if (RightTabs.Remove(tab))
+            {
+                LeftTabs.Add(tab);                
+                SelectedLeftTab = tab;
+                if (LeftTabs.Count == 0)
                 {
-                    RightColumnWidth = new GridLength(1, GridUnitType.Star);
-                    SeparatorWidth = new GridLength(5, GridUnitType.Pixel);
+                    IsSplitView = false;
+                    RightColumnWidth = new GridLength(0, GridUnitType.Pixel);
+                    SeparatorWidth = new GridLength(0, GridUnitType.Pixel);
+                    SelectedRightTab = null;
                 }
                 OnPropertyChanged();
             }

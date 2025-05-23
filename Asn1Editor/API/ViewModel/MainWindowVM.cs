@@ -24,6 +24,8 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     Asn1DocumentVM selectedRightTab;
     private bool rightPanelIsVisible = false;
     private ActivePanel activePanel = ActivePanel.Left;
+    private GridLength separatorWidth = new GridLength(0, GridUnitType.Pixel);
+    private GridLength rightColumnWidth = new GridLength(0, GridUnitType.Pixel);
 
     public MainWindowVM(
         IWindowFactory windowFactory,
@@ -92,8 +94,32 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// </summary>
     public bool IsNotSplitView => !IsSplitView;
 
-    public GridLength SeparatorWidth => IsSplitView ? new GridLength(5) : new GridLength(0);
-    public GridLength RightColumnWidth => IsSplitView ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+    public GridLength SeparatorWidth
+    {
+        get
+        {
+            return separatorWidth;
+        }
+        set
+        {
+            separatorWidth = value;
+        }
+    } 
+
+    //public GridLength RightColumnWidth => IsSplitView ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+
+    public GridLength RightColumnWidth
+    {
+        get
+        {
+            return rightColumnWidth;
+        }
+        set
+        {
+            rightColumnWidth = value;
+        }
+    }
+
 
     /// <summary>
     /// Selected tab of both panels
@@ -253,6 +279,12 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
                 RightTabs.Add(tab);
                 IsSplitView = true;
                 SelectedRightTab = tab;
+                if (RightTabs.Count == 1)
+                {
+                    RightColumnWidth = new GridLength(1, GridUnitType.Star);
+                    SeparatorWidth = new GridLength(5, GridUnitType.Pixel);
+                }
+                OnPropertyChanged();
             }
         }
     }

@@ -58,6 +58,12 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
         // Start with one tab
         addTabToList(new Asn1DocumentVM(NodeViewOptions, TreeCommands));
+
+        LeftTabsView = new ListCollectionView(Tabs);
+        LeftTabsView.Filter = o => ((Asn1DocumentVM)o).ActivePanel == ActivePanel.Left;
+
+        RightTabsView = new ListCollectionView(Tabs);
+        RightTabsView.Filter = o => ((Asn1DocumentVM)o).ActivePanel == ActivePanel.Right;
     }
 
     async void onNodeViewOptionsChanged(Object sender, RequireTreeRefreshEventArgs args) {
@@ -108,8 +114,8 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     public ObservableCollection<Asn1DocumentVM> Tabs { get; } = [];
 
-    public ICollectionView LeftTabsView => GetTabsViewFor(ActivePanel.Left);
-    public ICollectionView RightTabsView => GetTabsViewFor(ActivePanel.Right);
+    public ICollectionView LeftTabsView { get; }
+    public ICollectionView RightTabsView { get; }
 
     /// <summary>
     /// Gets or sets a value indicating whether the view is split into multiple panels.
@@ -497,12 +503,5 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public Task RefreshTabs(Func<Asn1TreeNode, Boolean>? filter = null)
     {
         return Task.WhenAll(Tabs.Select(x => x.RefreshTreeView(filter)));
-    }
-
-    public ICollectionView GetTabsViewFor(ActivePanel panel)
-    {
-        var view = new ListCollectionView(Tabs);
-        view.Filter = o => ((Asn1DocumentVM)o).ActivePanel == panel;
-        return view;
     }
 }

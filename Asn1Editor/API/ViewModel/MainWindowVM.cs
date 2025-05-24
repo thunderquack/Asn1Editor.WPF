@@ -53,13 +53,6 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         MoveTabToRightCommand = new RelayCommand(moveTabToRight);
         appCommands.ShowConverterWindow = new RelayCommand(showConverter);
 
-        // Initialize views
-        LeftTabsView = new ListCollectionView(Tabs);
-        LeftTabsView.Filter = o => (o as Asn1DocumentVM)?.ActivePanel == ActivePanel.Left;
-
-        RightTabsView = new ListCollectionView(Tabs);
-        RightTabsView.Filter = o => (o as Asn1DocumentVM)?.ActivePanel == ActivePanel.Right;
-
         // Handle dynamic updates
         Tabs.CollectionChanged += (_, _) => attachPropertyChangedHandlers();
 
@@ -115,39 +108,13 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     public ObservableCollection<Asn1DocumentVM> Tabs { get; } = [];
 
-    public ICollectionView LeftTabsView { get; }
-    public ICollectionView RightTabsView { get; }
-
-    public ObservableCollection<Asn1DocumentVM> LeftTabs
-    {
-        get
-        {
-            return new ObservableCollection<Asn1DocumentVM>(Tabs.Where(x => x.ActivePanel == ActivePanel.Left));
-        }
-    }
-
-    public ObservableCollection<Asn1DocumentVM> RightTabs
-    {
-        get
-        {
-            return new ObservableCollection<Asn1DocumentVM>(Tabs.Where(x => x.ActivePanel == ActivePanel.Right));
-        }
-    }
+    public ICollectionView LeftTabsView => GetTabsViewFor(ActivePanel.Left);
+    public ICollectionView RightTabsView => GetTabsViewFor(ActivePanel.Right);
 
     /// <summary>
     /// Gets or sets a value indicating whether the view is split into multiple panels.
     /// </summary>
-    /// <remarks>Setting this property to <see langword="true"/> makes the right panel visible, provided it
-    /// contains tabs.  Setting it to <see langword="false"/> hides the right panel.</remarks>
-    public bool IsSplitView
-    {
-        get => rightPanelIsVisible && RightTabs.Any();
-        set
-        {
-            rightPanelIsVisible = value;
-            OnPropertyChanged();
-        }
-    }
+    public bool IsSplitView => Tabs.Any(x => x.ActivePanel == ActivePanel.Right);
 
     /// <summary>
     /// Gets a value indicating whether the current view is not a split view
@@ -251,11 +218,6 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     void removeTab(Asn1DocumentVM tab) 
     {
         Tabs.Remove(tab);
-
-        if (!RightTabs.Any())
-        {
-            IsSplitView = false;
-        }
     }
 
     /// <summary>
@@ -311,23 +273,25 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     }
 
     /// <summary>
-    /// Moves tab document from <see cref="LeftTabs"/> to <see cref="RightTabs"/> list.
+    /// Moves the selected tab from the left panel to the right panel.
     /// </summary>
-    /// <param name="tab"></param>
     private void moveTabToRight(Object o)
     {
-        var tab = SelectedTab;        
-        if (LeftTabs.Count > 1)
+        var tab = SelectedTab;
+        int leftTabCount = Tabs.Count(x => x.ActivePanel == ActivePanel.Left);
+
+        if (leftTabCount > 1)
         {
             tab.ActivePanel = ActivePanel.Right;
-            IsSplitView = true;
             SelectedRightTab = tab;
-            if (RightTabs.Count == 1)
+
+            if (Tabs.Count(x => x.ActivePanel == ActivePanel.Right) == 1)
             {
                 RightColumnWidth = new GridLength(1, GridUnitType.Star);
                 SeparatorWidth = new GridLength(5, GridUnitType.Pixel);
             }
-            OnPropertyChanged();
+
+            OnPropertyChanged(nameof(IsSplitView));
         }
     }
 
@@ -336,14 +300,16 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         var tab = SelectedTab;
         tab.ActivePanel = ActivePanel.Left;
         SelectedLeftTab = tab;
-        if (RightTabs.Count == 0)
+
+        int rightTabCount = Tabs.Count(x => x.ActivePanel == ActivePanel.Right);
+        if (rightTabCount == 0)
         {
-            IsSplitView = false;
             RightColumnWidth = new GridLength(0, GridUnitType.Pixel);
             SeparatorWidth = new GridLength(0, GridUnitType.Pixel);
             SelectedRightTab = null;
-            OnPropertyChanged();
         }
+
+        OnPropertyChanged(nameof(IsSplitView));
     }
 
     #region Read content to tab
@@ -531,5 +497,12 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     public Task RefreshTabs(Func<Asn1TreeNode, Boolean>? filter = null)
     {
         return Task.WhenAll(Tabs.Select(x => x.RefreshTreeView(filter)));
+    }
+
+    public ICollectionView GetTabsViewFor(ActivePanel panel)
+    {
+        var view = new ListCollectionView(Tabs);
+        view.Filter = o => ((Asn1DocumentVM)o).ActivePanel == panel;
+        return view;
     }
 }

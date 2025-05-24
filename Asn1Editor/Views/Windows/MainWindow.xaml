@@ -59,18 +59,20 @@
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem CommandParameter="{Binding}"
-                                  Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}">
+                        <MenuItem Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}"
+                                  CommandParameter="{Binding}">
+                            <MenuItem.Icon>
+                                <!-- transparent stub icon -->
+                                <Rectangle Width="16" Height="16" Fill="Transparent"/>
+                            </MenuItem.Icon>
                             <MenuItem.Style>
                                 <Style TargetType="MenuItem">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding ActivePanel}" Value="Left">
-                                            <Setter Property="Command"
-                                                Value="{Binding DataContext.MoveTabToRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <Setter Property="Command" Value="{Binding DataContext.MoveTabToRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding ActivePanel}" Value="Right">
-                                            <Setter Property="Command"
-                                                Value="{Binding DataContext.MoveTabToLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <Setter Property="Command" Value="{Binding DataContext.MoveTabToLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

@@ -1,4 +1,4 @@
-﻿namespace SysadminsLV.Asn1Editor.API.ModelObjects
+﻿namespace SysadminsLV.Asn1Editor.Controls
 {
     /// <summary>
     /// Indicates the active panel in the main window. Could be extended in the future to support more panels.

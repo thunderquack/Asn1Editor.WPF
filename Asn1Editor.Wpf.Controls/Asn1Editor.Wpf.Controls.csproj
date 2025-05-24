@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivePanel.cs" />
     <Compile Include="AsnHexViewer.cs" />
     <Compile Include="AsnTreeView.cs" />
     <Compile Include="AutoSizeTextBox.cs" />

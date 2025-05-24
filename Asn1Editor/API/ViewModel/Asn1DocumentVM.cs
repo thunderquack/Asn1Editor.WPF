@@ -13,7 +13,19 @@ public class Asn1DocumentVM : AsyncViewModel {
     String path, fileName, pbHeaderText;
     Boolean isModified, suppressModified;
 
-    public ActivePanel ActivePanel { get; set; } = ActivePanel.Left;
+    ActivePanel activePanel { get; set; } = ActivePanel.Left;
+    public ActivePanel ActivePanel
+    {
+        get => activePanel;
+        set
+        {
+            if (activePanel != value)
+            {
+                activePanel = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     public Asn1DocumentVM(NodeViewOptions nodeViewOptions, ITreeCommands treeCommands) {
         DataSource = new DataSource(nodeViewOptions);

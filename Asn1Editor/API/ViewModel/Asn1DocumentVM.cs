@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using SysadminsLV.Asn1Editor.API.Interfaces;
 using SysadminsLV.Asn1Editor.API.ModelObjects;
+using SysadminsLV.Asn1Editor.Controls;
 
 namespace SysadminsLV.Asn1Editor.API.ViewModel;
 

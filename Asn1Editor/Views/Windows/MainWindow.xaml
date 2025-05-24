@@ -9,6 +9,7 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:wpfControls="clr-namespace:SysadminsLV.WPF.OfficeTheme.Controls;assembly=Wpf.OfficeTheme"
         xmlns:c="clr-namespace:SysadminsLV.Asn1Editor.Controls;assembly=SysadminsLV.Asn1Editor.Controls"
+        xmlns:converters="clr-namespace:SysadminsLV.Asn1Editor.Controls.Converters;assembly=SysadminsLV.Asn1Editor.Controls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:MainWindowVM}"
         Title="ASN.1 Editor"
@@ -25,46 +26,56 @@
         <KeyBinding Modifiers="Control+Shift" Key="S" Command="{Binding SaveCommand}" CommandParameter="2"/>
     </Window.InputBindings>
     <Window.Resources>
+        <converters:MoveTabHeaderConverter x:Key="MoveTabHeaderConverter"/>
         <DataTemplate x:Key="AsnTabHeaderTemplate">
-            <TextBlock 
-                Text="{Binding Header}"
-                ToolTip="{Binding ToolTipText}"
-                Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext}"
-                ContextMenuOpening="onTabHeaderContextMenuOpening">
+            <TextBlock Text="{Binding Header}"
+                       ToolTip="{Binding ToolTipText}">
                 <TextBlock.ContextMenu>
-                    <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
-                     MaxHeight="200">
+                    <ContextMenu>
                         <MenuItem Header="_Save"
-                      Command="{Binding SaveCommand}"
-                      InputGestureText="Ctrl + S">
+                                  Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  InputGestureText="Ctrl + S">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/save_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="_Close"
-                      Command="{Binding Path=CloseTabCommand}"
-                      InputGestureText="Ctrl + F4">
+                                  Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  InputGestureText="Ctrl + F4">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Close _All"
-                      Command="{Binding Path=CloseAllTabsCommand}">
+                                  Command="{Binding DataContext.CloseAllTabsCommand, RelativeSource={RelativeSource AncestorType=Window}}">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Close All _But This"
-                      Command="{Binding Path=CloseAllButThisTabCommand}">
+                                  Command="{Binding DataContext.CloseAllButThisTabCommand, RelativeSource={RelativeSource AncestorType=Window}}">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-
-                        <MenuItem Header="Move Right"
-                    Command="{Binding Path=MoveTabToRightCommand}"
-                    CommandParameter="{Binding}" />
+                        <MenuItem CommandParameter="{Binding}"
+                                  Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}">
+                            <MenuItem.Style>
+                                <Style TargetType="MenuItem">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ActivePanel}" Value="Left">
+                                            <Setter Property="Command"
+                                                Value="{Binding DataContext.MoveTabToRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ActivePanel}" Value="Right">
+                                            <Setter Property="Command"
+                                                Value="{Binding DataContext.MoveTabToLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </MenuItem.Style>
+                        </MenuItem>
                     </ContextMenu>
                 </TextBlock.ContextMenu>
             </TextBlock>
@@ -564,6 +575,6 @@
                     </TabControl.ContentTemplate>
                 </TabControl>
             </Border>
-            </Grid>
+        </Grid>
     </DockPanel>
 </Window>

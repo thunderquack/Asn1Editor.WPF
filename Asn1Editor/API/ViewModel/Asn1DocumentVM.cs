@@ -130,4 +130,9 @@ public class Asn1DocumentVM : AsyncViewModel {
         Path = String.Empty;
         IsModified = false;
     }
+
+    public override String ToString()
+    {
+        return $"Header: {Header}, Active panel: {ActivePanel}";
+    }
 }

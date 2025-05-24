@@ -284,9 +284,12 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// </summary>
     private void moveTabToRight(Object o)
     {
-        var tab = SelectedTab;
-        int leftTabCount = Tabs.Count(x => x.ActivePanel == ActivePanel.Left);
+        if (o is not Asn1DocumentVM tab)
+        {
+            return;
+        }
 
+        int leftTabCount = Tabs.Count(x => x.ActivePanel == ActivePanel.Left);
         if (leftTabCount > 1)
         {
             tab.ActivePanel = ActivePanel.Right;
@@ -304,7 +307,11 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     private void moveTabToLeft(Object o)
     {
-        var tab = SelectedTab;
+        if (o is not Asn1DocumentVM tab)
+        {
+            return;
+        }
+
         tab.ActivePanel = ActivePanel.Left;
         SelectedLeftTab = tab;
 

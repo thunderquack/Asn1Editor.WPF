@@ -539,17 +539,18 @@
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0" Background="LightBlue">
                 <TabControl ItemsSource="{Binding LeftTabsView}"
-                    SelectedItem="{Binding SelectedLeftTab}"
-                    BorderThickness="0"
-                    Style="{StaticResource LeftTabControlStyle}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                    <TabControl.ItemTemplate>
-                        <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
-                    </TabControl.ItemTemplate>
-                    <TabControl.ContentTemplate>
-                        <StaticResource ResourceKey="AsnTabContentTemplate"/>
-                    </TabControl.ContentTemplate>
+                            SelectedItem="{Binding SelectedLeftTab}"
+                            BorderThickness="0"
+                            Style="{StaticResource LeftTabControlStyle}"
+                            SelectionChanged="onLeftTabSelectionChanged"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                            <TabControl.ItemTemplate>
+                                <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
+                            </TabControl.ItemTemplate>
+                            <TabControl.ContentTemplate>
+                                <StaticResource ResourceKey="AsnTabContentTemplate"/>
+                            </TabControl.ContentTemplate>
                 </TabControl>
             </Border>
             <GridSplitter Grid.Column="1"
@@ -565,16 +566,17 @@
                 Background="LightGreen" 
                 Visibility="{Binding IsSplitView, Converter={StaticResource BooleanToVisibility}}">
                 <TabControl ItemsSource="{Binding RightTabsView}"
-                SelectedItem="{Binding SelectedRightTab}"
-                BorderThickness="0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                    <TabControl.ItemTemplate>
-                        <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
-                    </TabControl.ItemTemplate>
-                    <TabControl.ContentTemplate>
-                        <StaticResource ResourceKey="AsnTabContentTemplate"/>
-                    </TabControl.ContentTemplate>
+                            SelectedItem="{Binding SelectedRightTab}"
+                            SelectionChanged="onLeftTabSelectionChanged"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                            <TabControl.ItemTemplate>
+                                <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
+                            </TabControl.ItemTemplate>
+                            <TabControl.ContentTemplate>
+                                <StaticResource ResourceKey="AsnTabContentTemplate"/>
+                            </TabControl.ContentTemplate>
                 </TabControl>
             </Border>
         </Grid>

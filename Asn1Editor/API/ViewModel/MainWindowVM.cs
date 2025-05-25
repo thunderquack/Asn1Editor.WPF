@@ -25,6 +25,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     readonly IUIMessenger _uiMessenger;
     Asn1DocumentVM selectedLeftTab;
     Asn1DocumentVM selectedRightTab;
+    Asn1DocumentVM selectedTab;
     private bool rightPanelIsVisible = false;
     private ActivePanel activePanel = ActivePanel.Left;
     private GridLength separatorWidth = new GridLength(0, GridUnitType.Pixel);
@@ -157,42 +158,21 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// <summary>
     /// Selected tab of both panels
     /// </summary>
-    public Asn1DocumentVM SelectedTab {
-        get
-        {
-            if (!rightPanelIsVisible)
-            {
-                return selectedLeftTab;
-            }
-            if (activePanel == ActivePanel.Left)
-            {
-                return selectedLeftTab;
-            } 
-            else
-            {
-                return selectedRightTab;
-            }
-        }
-        set
-        {
-            if (activePanel == ActivePanel.Left)
-            {
-                SelectedLeftTab = value;
-            }
-            else
-            {
-                SelectedRightTab = value;
-            }
-        }
-    }
+    public Asn1DocumentVM SelectedTab => selectedTab;
 
     public Asn1DocumentVM SelectedLeftTab
     {
         get => selectedLeftTab;
         set
         {
-            selectedLeftTab = value;
-            OnPropertyChanged();
+            if (selectedLeftTab != value)
+            {
+                selectedLeftTab = value;
+                selectedTab = value;
+                activePanel = ActivePanel.Left;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedTab));
+            }
         }
     }
 
@@ -201,8 +181,14 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         get => selectedRightTab;
         set
         {
-            selectedRightTab = value;
-            OnPropertyChanged();
+            if (selectedRightTab != value)
+            {
+                selectedRightTab = value;
+                selectedTab = value;
+                activePanel = ActivePanel.Right;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedTab));
+            }
         }
     }
 
@@ -235,7 +221,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     void addTabToList(Asn1DocumentVM tab)
     {
         Tabs.Add(tab);
-        SelectedTab = tab;
+        selectedTab = tab;
     }
     /// <summary>
     /// Returns a blank tab instance. Either, it is a current value of <see cref="SelectedTab"/> property
@@ -457,7 +443,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
                 continue;
             }
-            SelectedTab = tab;
+            selectedTab = tab;
             if (!RequestFileSave(tab))
             {
                 return false;

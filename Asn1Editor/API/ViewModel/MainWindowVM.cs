@@ -165,14 +165,11 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         get => selectedLeftTab;
         set
         {
-            if (selectedLeftTab != value)
-            {
-                selectedLeftTab = value;
-                selectedTab = value;
-                activePanel = ActivePanel.Left;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(SelectedTab));
-            }
+            selectedLeftTab = value;
+            selectedTab = value;
+            activePanel = ActivePanel.Left;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(SelectedTab));
         }
     }
 
@@ -181,14 +178,11 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         get => selectedRightTab;
         set
         {
-            if (selectedRightTab != value)
-            {
-                selectedRightTab = value;
-                selectedTab = value;
-                activePanel = ActivePanel.Right;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(SelectedTab));
-            }
+            selectedRightTab = value;
+            selectedTab = value;
+            activePanel = ActivePanel.Right;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(SelectedTab));
         }
     }
 

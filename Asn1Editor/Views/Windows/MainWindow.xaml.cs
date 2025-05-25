@@ -1,9 +1,11 @@
 ﻿using SysadminsLV.Asn1Editor.API.Interfaces;
 using SysadminsLV.Asn1Editor.API.ViewModel;
+using SysadminsLV.Asn1Editor.Controls;
 using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace SysadminsLV.Asn1Editor.Views.Windows;
 
@@ -43,6 +45,19 @@ public partial class MainWindow {
         if (DataContext is MainWindowVM vm && e.AddedItems.Count > 0)
         {
             vm.SelectedRightTab = (Asn1DocumentVM)e.AddedItems[0];
+        }
+    }
+    private void AsnTreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is FrameworkElement fe && fe.DataContext is Asn1DocumentVM vm)
+        {
+            if (DataContext is MainWindowVM mainVm)
+            {
+                if (vm.ActivePanel == ActivePanel.Left)
+                    mainVm.SelectedLeftTab = vm;
+                else
+                    mainVm.SelectedRightTab = vm;
+            }
         }
     }
 }

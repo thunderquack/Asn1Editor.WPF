@@ -124,15 +124,16 @@
                         </ResourceDictionary>
                     </Grid.Resources>
                     <c:AsnTreeView ItemsSource="{Binding Tree}"
-                       SelectedItem="{Binding DataSource.SelectedNode, Mode=TwoWay}"
-                       AllowDrop="True"
-                       FontSize="{Binding NodeViewOptions.FontSize}"
-                       MaxTextLength="{Binding NodeViewOptions.MaxTreeTextLength}"
-                       DoubleClickCommand="{Binding TreeCommands.EditNodeCommand}"
-                       DoubleClickCommandParameter="{x:Static clr:NodeEditMode.Text}"
-                       FileDropCommand="{Binding DataContext.DropFileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                       ItemTemplate="{StaticResource AsnTreeViewDataTemplate}"
-                       ItemContainerStyle="{StaticResource AsnTreeViewItemStyle}">
+                                   SelectedItem="{Binding DataSource.SelectedNode, Mode=TwoWay}"
+                                   AllowDrop="True"
+                                   FontSize="{Binding NodeViewOptions.FontSize}"
+                                   MaxTextLength="{Binding NodeViewOptions.MaxTreeTextLength}"
+                                   DoubleClickCommand="{Binding TreeCommands.EditNodeCommand}"
+                                   DoubleClickCommandParameter="{x:Static clr:NodeEditMode.Text}"
+                                   PreviewMouseDown="AsnTreeView_PreviewMouseDown"
+                                   FileDropCommand="{Binding DataContext.DropFileCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   ItemTemplate="{StaticResource AsnTreeViewDataTemplate}"
+                                   ItemContainerStyle="{StaticResource AsnTreeViewItemStyle}">
                         <c:AsnTreeView.InputBindings>
                             <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding TreeCommands.EditNodeCommand}" CommandParameter="{x:Static clr:NodeEditMode.Text}"/>
                             <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding TreeCommands.AddNewNodeCommand}"/>
@@ -545,12 +546,12 @@
                             SelectionChanged="onLeftTabSelectionChanged"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
-                            <TabControl.ItemTemplate>
-                                <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
-                            </TabControl.ItemTemplate>
-                            <TabControl.ContentTemplate>
-                                <StaticResource ResourceKey="AsnTabContentTemplate"/>
-                            </TabControl.ContentTemplate>
+                    <TabControl.ItemTemplate>
+                        <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <StaticResource ResourceKey="AsnTabContentTemplate"/>
+                    </TabControl.ContentTemplate>
                 </TabControl>
             </Border>
             <GridSplitter Grid.Column="1"
@@ -571,12 +572,12 @@
                             BorderThickness="0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
-                            <TabControl.ItemTemplate>
-                                <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
-                            </TabControl.ItemTemplate>
-                            <TabControl.ContentTemplate>
-                                <StaticResource ResourceKey="AsnTabContentTemplate"/>
-                            </TabControl.ContentTemplate>
+                    <TabControl.ItemTemplate>
+                        <StaticResource ResourceKey="AsnTabHeaderTemplate"/>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <StaticResource ResourceKey="AsnTabContentTemplate"/>
+                    </TabControl.ContentTemplate>
                 </TabControl>
             </Border>
         </Grid>

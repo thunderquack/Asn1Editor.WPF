@@ -26,7 +26,6 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     Asn1DocumentVM selectedLeftTab;
     Asn1DocumentVM selectedRightTab;
     Asn1DocumentVM selectedTab;
-    private bool rightPanelIsVisible = false;
     private ActivePanel activePanel = ActivePanel.Left;
     private GridLength separatorWidth = new GridLength(0, GridUnitType.Pixel);
     private GridLength rightColumnWidth = new GridLength(0, GridUnitType.Pixel);

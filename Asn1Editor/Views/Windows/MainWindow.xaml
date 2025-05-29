@@ -29,34 +29,36 @@
         <converters:MoveTabHeaderConverter x:Key="MoveTabHeaderConverter"/>
         <DataTemplate x:Key="AsnTabHeaderTemplate">
             <TextBlock Text="{Binding Header}"
-                       ToolTip="{Binding ToolTipText}">
+                       ToolTip="{Binding ToolTipText}"
+                       Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
                 <TextBlock.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="_Save"
-                                  Command="{Binding DataContext.SaveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  Command="{Binding Tag.SaveCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                   InputGestureText="Ctrl + S">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/save_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="_Close" 
-                                  Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                  CommandParameter="{Binding}"
+                        <MenuItem Header="_Close"
+                                  Command="{Binding PlacementTarget.Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                   InputGestureText="Ctrl + F4">
+                            <TextBlock Text="{Binding PlacementTarget.Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Close _All"
-                                  Command="{Binding DataContext.CloseAllTabsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                  Command="{Binding Tag.CloseAllTabsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Close All _But This"
-                                  Command="{Binding DataContext.CloseAllButThisTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                  Command="{Binding Tag.CloseAllButThisTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"  
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
@@ -251,7 +253,6 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">

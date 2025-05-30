@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace SysadminsLV.Asn1Editor.API.ViewModel;
 
-class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
+public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     readonly IWindowFactory _windowFactory;
     readonly IUIMessenger _uiMessenger;
     Asn1DocumentVM selectedLeftTab;
@@ -58,7 +58,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         Tabs.CollectionChanged += (_, _) => attachPropertyChangedHandlers();
 
         // Start with one tab
-        addTabToList(new Asn1DocumentVM(NodeViewOptions, TreeCommands));
+        addTabToList(new Asn1DocumentVM(NodeViewOptions, TreeCommands, this));
 
         LeftTabsView = new ListCollectionView(Tabs);
         LeftTabsView.Filter = o => ((Asn1DocumentVM)o).ActivePanel == ActivePanel.Left;
@@ -197,7 +197,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         }
     }
     void newTab(Object o) {
-        var tab = new Asn1DocumentVM(NodeViewOptions, TreeCommands);
+        var tab = new Asn1DocumentVM(NodeViewOptions, TreeCommands, this);
         addTabToList(tab);
     }
 
@@ -233,7 +233,7 @@ class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         }
 
         isNew = true;
-        var tab = new Asn1DocumentVM(NodeViewOptions, TreeCommands);
+        var tab = new Asn1DocumentVM(NodeViewOptions, TreeCommands, this);
         addTabToList(tab);
 
         return tab;

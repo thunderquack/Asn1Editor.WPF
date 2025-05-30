@@ -42,10 +42,10 @@
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="_Close"
-                                  Command="{Binding PlacementTarget.Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                  Command="{Binding DataContext.MainWindowVM.CloseTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                   CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                   InputGestureText="Ctrl + F4">
-                            <TextBlock Text="{Binding PlacementTarget.Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+<!--                            <TextBlock Text="{Binding DataContext.MainWindowVM.CloseTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" /> -->
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>

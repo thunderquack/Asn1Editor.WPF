@@ -28,11 +28,13 @@ public class Asn1DocumentVM : AsyncViewModel {
         }
     }
 
-    public Asn1DocumentVM(NodeViewOptions nodeViewOptions, ITreeCommands treeCommands) {
+    public Asn1DocumentVM(NodeViewOptions nodeViewOptions, ITreeCommands treeCommands, MainWindowVM mainWindowVM)
+    {
         DataSource = new DataSource(nodeViewOptions);
         DataSource.CollectionChanged += onDataSourceCollectionChanged;
         DataSource.RequireTreeRefresh += onTreeRefreshRequired;
         TreeCommands = treeCommands;
+        MainWindowVM = mainWindowVM;
     }
     async void onTreeRefreshRequired(Object sender, EventArgs e) {
         await RefreshTreeView();
@@ -42,6 +44,11 @@ public class Asn1DocumentVM : AsyncViewModel {
             IsModified = true;
         }
     }
+
+    /// <summary>
+    /// Reference to the view model for the main window of the application
+    /// </summary>
+    public MainWindowVM MainWindowVM { get; }
 
     public IDataSource DataSource { get; }
     public ITreeCommands TreeCommands { get; }

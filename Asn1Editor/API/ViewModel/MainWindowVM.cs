@@ -44,9 +44,9 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         NodeViewOptions.RequireTreeRefresh += onNodeViewOptionsChanged;
 
         NewCommand = new RelayCommand(newTab);
-        CloseTabCommand = new RelayCommand(closeTab);
+        CloseTabCommand = new RelayCommand<Asn1DocumentVM>(closeTab);
         CloseAllTabsCommand = new RelayCommand(_ => CloseAllTabs());
-        CloseAllButThisTabCommand = new RelayCommand(closeAllButThisTab);
+        CloseAllButThisTabCommand = new RelayCommand<Asn1DocumentVM>(closeAllButThisTab);
         OpenCommand = new AsyncCommand(openFileAsync);
         SaveCommand = new RelayCommand(saveFile, canPrintSave);
         DropFileCommand = new AsyncCommand(dropFileAsync);
@@ -379,29 +379,18 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     #region Close Tab(s)
 
-    void closeTab(Object o) {
-        if (o == null) {
-            closeTab(SelectedTab);
-        } else if (o is ClosableTabItem tabItem) { // TODO: need to eliminate explicit reference to UI elements
-            var vm = (Asn1DocumentVM)tabItem.Content;
-            closeTab(vm);
-        }
-    }
-    Boolean canCloseTab(Object o) {
+     Boolean canCloseTab(Object o) {
         // TODO: need to eliminate explicit reference to UI elements
         return o is null or ClosableTabItem;
     }
     void closeAllTabs(Object o) {
         CloseAllTabs();
     }
-    void closeAllButThisTab(Object o) {
-        if (o == null) {
-            closeTabsWithPreservation(SelectedTab);
-        } else if (o is ClosableTabItem tabItem) { // TODO: need to eliminate explicit reference to UI elements
-            var vm = (Asn1DocumentVM)tabItem.Content;
-            closeTabsWithPreservation(vm);
-        }
+    void closeAllButThisTab(Asn1DocumentVM preservedTab)
+    {
+        closeTabsWithPreservation(SelectedTab);
     }
+
     Boolean canCloseAllButThisTab(Object o) {
         if (Tabs.Count == 0) {
             return false;

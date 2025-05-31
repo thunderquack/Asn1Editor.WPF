@@ -47,7 +47,8 @@ public partial class MainWindow {
             vm.SelectedRightTab = (Asn1DocumentVM)e.AddedItems[0];
         }
     }
-    private void AsnTreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+
+    private void asnTreeViewPreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
         if (sender is FrameworkElement fe && fe.DataContext is Asn1DocumentVM vm)
         {

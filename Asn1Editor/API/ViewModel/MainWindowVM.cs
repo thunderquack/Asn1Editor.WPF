@@ -69,7 +69,8 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     async void onNodeViewOptionsChanged(Object sender, RequireTreeRefreshEventArgs args) {
         await RefreshTabs(args.Filter);
     }
-    void attachPropertyChangedHandlers()
+    
+    private void attachPropertyChangedHandlers()
     {
         foreach (var tab in Tabs)
         {
@@ -77,7 +78,8 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
             tab.PropertyChanged += onTabPropertyChanged;
         }
     }
-    void onTabPropertyChanged(object sender, PropertyChangedEventArgs e)
+    
+    private void onTabPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Asn1DocumentVM.ActivePanel))
         {
@@ -127,6 +129,9 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// </summary>
     public bool IsNotSplitView => !IsSplitView;
 
+    /// <summary>
+    /// Gets or sets the width of the separator between panels in the grid layout.
+    /// </summary>
     public GridLength SeparatorWidth
     {
         get
@@ -140,6 +145,9 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         }
     } 
 
+    /// <summary>
+    /// Gets or sets the width of the right panel in the grid layout.
+    /// </summary>
     public GridLength RightColumnWidth
     {
         get
@@ -198,7 +206,7 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         addTabToList(tab);
     }
 
-    void removeTab(Asn1DocumentVM tab) 
+    private void removeTab(Asn1DocumentVM tab) 
     {
         Tabs.Remove(tab);
     }
@@ -208,11 +216,12 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// active (sets to <see cref="SelectedTab"/> property).
     /// </summary>
     /// <param name="tab">Tab document to add.</param>
-    void addTabToList(Asn1DocumentVM tab)
+    private void addTabToList(Asn1DocumentVM tab)
     {
         Tabs.Add(tab);
         selectedTab = tab;
     }
+
     /// <summary>
     /// Returns a blank tab instance. Either, it is a current value of <see cref="SelectedTab"/> property
     /// or new tab document instance.
@@ -376,14 +385,15 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
 
     #region Close Tab(s)
 
-     Boolean canCloseTab(Object o) {
+    Boolean canCloseTab(Object o) {
         // TODO: need to eliminate explicit reference to UI elements
         return o is null or ClosableTabItem;
     }
     void closeAllTabs(Object o) {
         CloseAllTabs();
     }
-    void closeAllButThisTab(Asn1DocumentVM preservedTab)
+    
+    private void closeAllButThisTab(Asn1DocumentVM preservedTab)
     {
         closeTabsWithPreservation(SelectedTab);
     }

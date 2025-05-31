@@ -16,6 +16,10 @@ public class Asn1DocumentVM : AsyncViewModel {
     Boolean isModified, suppressModified;
 
     ActivePanel activePanel { get; set; } = ActivePanel.Left;
+
+    /// <summary>
+    /// Gets or sets the currently active panel of the asn.1 document
+    /// </summary>
     public ActivePanel ActivePanel
     {
         get => activePanel;
@@ -51,6 +55,9 @@ public class Asn1DocumentVM : AsyncViewModel {
     /// </summary>
     public MainWindowVM MainWindowVM { get; }
 
+    /// <summary>
+    /// Gets the current command to move a tab between panels
+    /// </summary>
     public ICommand MoveTabCommand => activePanel == ActivePanel.Left
         ? MainWindowVM.MoveTabRightCommand
         : MainWindowVM.MoveTabLeftCommand;
@@ -156,6 +163,7 @@ public class Asn1DocumentVM : AsyncViewModel {
         IsModified = false;
     }
 
+    /// <inheritdoc />
     public override String ToString()
     {
         return $"Header: {Header}, Active panel: {ActivePanel}";

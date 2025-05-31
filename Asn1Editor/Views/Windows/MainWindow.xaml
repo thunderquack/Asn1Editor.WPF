@@ -86,11 +86,11 @@
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding ActivePanel}" Value="Left">
                                             <Setter Property="Command"
-                                                    Value="{Binding DataContext.MoveTabToRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.MoveTabRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding ActivePanel}" Value="Right">
                                             <Setter Property="Command"
-                                                    Value="{Binding DataContext.MoveTabToLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                                    Value="{Binding DataContext.MoveTabLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

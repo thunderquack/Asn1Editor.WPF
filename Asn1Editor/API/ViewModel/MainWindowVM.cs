@@ -49,8 +49,8 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         OpenCommand = new AsyncCommand(openFileAsync);
         SaveCommand = new RelayCommand(saveFile, canPrintSave);
         DropFileCommand = new AsyncCommand(dropFileAsync);
-        MoveTabToLeftCommand = new RelayCommand(moveTabToLeft);
-        MoveTabToRightCommand = new RelayCommand(moveTabToRight);
+        MoveTabLeftCommand = new RelayCommand(moveTabLeft);
+        MoveTabRightCommand = new RelayCommand(moveTabRight);
         appCommands.ShowConverterWindow = new RelayCommand(showConverter);
 
         // Handle dynamic updates
@@ -102,12 +102,12 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// <summary>
     /// Gets the command that moves the currently selected tab to the left.
     /// </summary>
-    public ICommand MoveTabToLeftCommand { get; }
+    public ICommand MoveTabLeftCommand { get; }
 
     /// <summary>
     /// Gets the command that moves the currently selected tab to the right.
     /// </summary>
-    public ICommand MoveTabToRightCommand { get; }
+    public ICommand MoveTabRightCommand { get; }
 
     public GlobalData GlobalData { get; }
     public NodeViewOptions NodeViewOptions { get; }
@@ -258,7 +258,7 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// <summary>
     /// Moves the selected tab from the left panel to the right panel.
     /// </summary>
-    private void moveTabToRight(Object o)
+    private void moveTabRight(Object o)
     {
         if (o is not Asn1DocumentVM tab)
         {
@@ -281,7 +281,7 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
         }
     }
 
-    private void moveTabToLeft(Object o)
+    private void moveTabLeft(Object o)
     {
         if (o is not Asn1DocumentVM tab)
         {

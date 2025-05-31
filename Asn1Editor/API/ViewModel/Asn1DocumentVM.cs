@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using SysadminsLV.Asn1Editor.API.Interfaces;
 using SysadminsLV.Asn1Editor.API.ModelObjects;
 using SysadminsLV.Asn1Editor.Controls;
@@ -49,6 +50,10 @@ public class Asn1DocumentVM : AsyncViewModel {
     /// Reference to the view model for the main window of the application
     /// </summary>
     public MainWindowVM MainWindowVM { get; }
+
+    public ICommand MoveTabCommand => activePanel == ActivePanel.Left
+        ? MainWindowVM.MoveTabRightCommand
+        : MainWindowVM.MoveTabLeftCommand;
 
     public IDataSource DataSource { get; }
     public ITreeCommands TreeCommands { get; }

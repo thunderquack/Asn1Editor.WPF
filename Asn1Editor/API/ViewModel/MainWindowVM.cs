@@ -109,10 +109,6 @@ public class MainWindowVM : ViewModelBase, IMainWindowVM, IHasAsnDocumentTabs {
     /// </summary>
     public ICommand MoveTabRightCommand { get; }
 
-    public ICommand MoveTabCommand => selectedTab.ActivePanel == ActivePanel.Left
-        ? MoveTabRightCommand
-        : MoveTabLeftCommand;
-
     public GlobalData GlobalData { get; }
     public NodeViewOptions NodeViewOptions { get; }
 

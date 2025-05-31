@@ -64,7 +64,7 @@
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}"
-                                  Command="{Binding MainWindowVM.MoveTabCommand}"
+                                  Command="{Binding MoveTabCommand}"
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>
                                 <Image Width="16">

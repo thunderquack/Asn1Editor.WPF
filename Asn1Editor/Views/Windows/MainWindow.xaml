@@ -62,6 +62,7 @@
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
+                        <Separator/>
                         <MenuItem Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}"
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>

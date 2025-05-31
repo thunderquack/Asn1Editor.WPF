@@ -65,17 +65,39 @@
                         <MenuItem Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}"
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>
-                                <!-- transparent stub icon -->
-                                <Rectangle Width="16" Height="16" Fill="Transparent"/>
+                                <ContentControl>
+                                    <ContentControl.Style>
+                                        <Style TargetType="ContentControl">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ActivePanel}" Value="Left">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Image Source="/Views/Images/Menu/right-arrow_16x16.png"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ActivePanel}" Value="Right">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <Image Source="/Views/Images/Menu/left-arrow_16x16.png"/>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
                             </MenuItem.Icon>
                             <MenuItem.Style>
                                 <Style TargetType="MenuItem">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding ActivePanel}" Value="Left">
-                                            <Setter Property="Command" Value="{Binding DataContext.MoveTabToRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <Setter Property="Command"
+                                                    Value="{Binding DataContext.MoveTabToRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding ActivePanel}" Value="Right">
-                                            <Setter Property="Command" Value="{Binding DataContext.MoveTabToLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                            <Setter Property="Command"
+                                                    Value="{Binding DataContext.MoveTabToLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>

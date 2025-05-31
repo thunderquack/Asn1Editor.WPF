@@ -65,28 +65,20 @@
                         <MenuItem Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}"
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>
-                                <ContentControl>
-                                    <ContentControl.Style>
-                                        <Style TargetType="ContentControl">
+                                <Image Width="16">
+                                    <Image.Style>
+                                        <Style TargetType="Image">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ActivePanel}" Value="Left">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Image Source="/Views/Images/Menu/right-arrow_16x16.png"/>
-                                                        </Setter.Value>
-                                                    </Setter>
+                                                    <Setter Property="Source" Value="/Views/Images/Menu/right-arrow_16x16.png"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding ActivePanel}" Value="Right">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <Image Source="/Views/Images/Menu/left-arrow_16x16.png"/>
-                                                        </Setter.Value>
-                                                    </Setter>
+                                                    <Setter Property="Source" Value="/Views/Images/Menu/left-arrow_16x16.png"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
-                                    </ContentControl.Style>
-                                </ContentControl>
+                                    </Image.Style>
+                                </Image>
                             </MenuItem.Icon>
                             <MenuItem.Style>
                                 <Style TargetType="MenuItem">

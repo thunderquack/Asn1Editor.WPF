@@ -56,7 +56,7 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Close All _But This"
-                                  Command="{Binding DataContext.MainWindowVM.CloseAllButThisTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"  
+                                  Command="{Binding DataContext.MainWindowVM.CloseAllButThisTabCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>
                                 <Image Source="/Views/Images/Menu/cancel_16x16.png"/>
@@ -64,6 +64,7 @@
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="{Binding ActivePanel, Converter={StaticResource MoveTabHeaderConverter}}"
+                                  Command="{Binding MainWindowVM.MoveTabCommand}"
                                   CommandParameter="{Binding}">
                             <MenuItem.Icon>
                                 <Image Width="16">
@@ -81,20 +82,6 @@
                                     </Image.Style>
                                 </Image>
                             </MenuItem.Icon>
-                            <MenuItem.Style>
-                                <Style TargetType="MenuItem">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ActivePanel}" Value="Left">
-                                            <Setter Property="Command"
-                                                    Value="{Binding DataContext.MoveTabRightCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding ActivePanel}" Value="Right">
-                                            <Setter Property="Command"
-                                                    Value="{Binding DataContext.MoveTabLeftCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </MenuItem.Style>
                         </MenuItem>
                     </ContextMenu>
                 </TextBlock.ContextMenu>
